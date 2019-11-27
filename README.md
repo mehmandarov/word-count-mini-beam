@@ -1,11 +1,11 @@
-# Minimal Word Count Example with Pipeline Representation Dump
+# Minimal Word Count Example with Pipeline Representation
 Apache Beam project based on the [minimal word count example][1], modified to show how to get the pipeline representation.
 
-More info about the word count example can be found in the [documentation][2].
+More info about the word count examples can be found in the [documentation][2].
 
 ## Running the code
 
-### Software Requirements
+### Software requirements
 
 * Java 8 (Java 9 or above are [not officially supported][2] by Beam yet)
 * Maven 3.6.x
@@ -14,10 +14,8 @@ More info about the word count example can be found in the [documentation][2].
 ```bash
 mvn compile exec:java \
         -Dexec.mainClass=org.apache.beam.examples.MinimalWordCount \
-        -Dexec.args="--inputFile=pom.xml --output=counts" \
         -Pdirect-runner
 ```
-
 
 
 [1]: https://github.com/apache/beam/blob/master/examples/java/src/main/java/org/apache/beam/examples/MinimalWordCount.java
