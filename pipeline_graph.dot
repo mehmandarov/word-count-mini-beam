@@ -1,0 +1,201 @@
+digraph {
+    rankdir=LR
+    subgraph cluster_0 {
+        label = ""
+        subgraph cluster_1 {
+            label = "TextIO.Read"
+            2 [label="Read(CompressedSource)"]
+        }
+        subgraph cluster_3 {
+            label = "FlatMapElements"
+            subgraph cluster_4 {
+                label = "FlatMapElements/FlatMap"
+                5 [label="ParMultiDo(Anonymous)"]
+                2 -> 5 [style=solid label=""]
+            }
+        }
+        subgraph cluster_6 {
+            label = "Filter"
+            subgraph cluster_7 {
+                label = "Filter/ParDo(Anonymous)"
+                8 [label="ParMultiDo(Anonymous)"]
+                5 -> 8 [style=solid label=""]
+            }
+        }
+        subgraph cluster_9 {
+            label = "Count.PerElement"
+            subgraph cluster_10 {
+                label = "Count.PerElement/Init"
+                subgraph cluster_11 {
+                    label = "Count.PerElement/Init/Map"
+                    12 [label="ParMultiDo(Anonymous)"]
+                    8 -> 12 [style=solid label=""]
+                }
+            }
+            subgraph cluster_13 {
+                label = "Count.PerElement/Combine.perKey(Count)"
+                14 [label="GroupByKey"]
+                12 -> 14 [style=solid label=""]
+                subgraph cluster_15 {
+                    label = "Count.PerElement/Combine.perKey(Count)/Combine.GroupedValues"
+                    subgraph cluster_16 {
+                        label = "Count.PerElement/Combine.perKey(Count)/Combine.GroupedValues/ParDo(Anonymous)"
+                        17 [label="ParMultiDo(Anonymous)"]
+                        14 -> 17 [style=solid label=""]
+                    }
+                }
+            }
+        }
+        subgraph cluster_18 {
+            label = "MapElements"
+            subgraph cluster_19 {
+                label = "MapElements/Map"
+                20 [label="ParMultiDo(Anonymous)"]
+                17 -> 20 [style=solid label=""]
+            }
+        }
+        subgraph cluster_21 {
+            label = "TextIO.Write"
+            subgraph cluster_22 {
+                label = "TextIO.Write/WriteFiles"
+                subgraph cluster_23 {
+                    label = "TextIO.Write/WriteFiles/RewindowIntoGlobal"
+                    24 [label="Window.Assign"]
+                    20 -> 24 [style=solid label=""]
+                }
+                subgraph cluster_25 {
+                    label = "TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles"
+                    26 [label="ParMultiDo(WriteUnshardedTempFiles)"]
+                    24 -> 26 [style=solid label=""]
+                    27 [label="GroupByKey"]
+                    26 -> 27 [style=solid label=""]
+                    subgraph cluster_28 {
+                        label = "TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnwritten"
+                        29 [label="ParMultiDo(WriteShardsIntoTempFiles)"]
+                        27 -> 29 [style=solid label=""]
+                    }
+                    subgraph cluster_30 {
+                        label = "TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/DropShardNum"
+                        31 [label="ParMultiDo(Anonymous)"]
+                        29 -> 31 [style=solid label=""]
+                    }
+                    32 [label="Flatten.PCollections"]
+                    26 -> 32 [style=solid label=""]
+                    31 -> 32 [style=solid label=""]
+                }
+                subgraph cluster_33 {
+                    label = "TextIO.Write/WriteFiles/GatherTempFileResults"
+                    subgraph cluster_34 {
+                        label = "TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList"
+                        subgraph cluster_35 {
+                            label = "TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization"
+                            subgraph cluster_36 {
+                                label = "TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)"
+                                37 [label="ParMultiDo(VoidKeyToMultimapMaterialization)"]
+                                32 -> 37 [style=solid label=""]
+                            }
+                        }
+                        38 [label="View.CreatePCollectionView"]
+                        37 -> 38 [style=solid label=""]
+                    }
+                    subgraph cluster_39 {
+                        label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow"
+                        subgraph cluster_40 {
+                            label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Create.Values"
+                            41 [label="Read(CreateSource)"]
+                        }
+                        subgraph cluster_42 {
+                            label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView"
+                            subgraph cluster_43 {
+                                label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView/ParDo(Anonymous)"
+                                44 [label="ParMultiDo(Anonymous)"]
+                                41 -> 44 [style=solid label=""]
+                                37 -> 44 [style=dashed label=""]
+                            }
+                        }
+                        subgraph cluster_45 {
+                            label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values"
+                            subgraph cluster_46 {
+                                label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values"
+                                subgraph cluster_47 {
+                                    label = "TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values/Map"
+                                    48 [label="ParMultiDo(Anonymous)"]
+                                    44 -> 48 [style=solid label=""]
+                                }
+                            }
+                        }
+                    }
+                }
+                subgraph cluster_49 {
+                    label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles"
+                    subgraph cluster_50 {
+                        label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Finalize"
+                        51 [label="ParMultiDo(Finalize)"]
+                        48 -> 51 [style=solid label=""]
+                    }
+                    subgraph cluster_52 {
+                        label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey"
+                        subgraph cluster_53 {
+                            label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Pair with random key"
+                            54 [label="ParMultiDo(AssignShard)"]
+                            51 -> 54 [style=solid label=""]
+                        }
+                        subgraph cluster_55 {
+                            label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle"
+                            subgraph cluster_56 {
+                                label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/Window.Into()"
+                                57 [label="Window.Assign"]
+                                54 -> 57 [style=solid label=""]
+                            }
+                            subgraph cluster_58 {
+                                label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps"
+                                subgraph cluster_59 {
+                                    label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps/ParDo(Anonymous)"
+                                    60 [label="ParMultiDo(Anonymous)"]
+                                    57 -> 60 [style=solid label=""]
+                                }
+                            }
+                            61 [label="GroupByKey"]
+                            60 -> 61 [style=solid label=""]
+                            subgraph cluster_62 {
+                                label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ExpandIterable"
+                                63 [label="ParMultiDo(Anonymous)"]
+                                61 -> 63 [style=solid label=""]
+                            }
+                            subgraph cluster_64 {
+                                label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps"
+                                subgraph cluster_65 {
+                                    label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard"
+                                    subgraph cluster_66 {
+                                        label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard/ParDo(Anonymous)"
+                                        67 [label="ParMultiDo(Anonymous)"]
+                                        63 -> 67 [style=solid label=""]
+                                    }
+                                }
+                                subgraph cluster_68 {
+                                    label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues"
+                                    subgraph cluster_69 {
+                                        label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues/ParDo(Anonymous)"
+                                        70 [label="ParMultiDo(Anonymous)"]
+                                        67 -> 70 [style=solid label=""]
+                                    }
+                                }
+                            }
+                        }
+                        subgraph cluster_71 {
+                            label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values"
+                            subgraph cluster_72 {
+                                label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values"
+                                subgraph cluster_73 {
+                                    label = "TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values/Map"
+                                    74 [label="ParMultiDo(Anonymous)"]
+                                    70 -> 74 [style=solid label=""]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
