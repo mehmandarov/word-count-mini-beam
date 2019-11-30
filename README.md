@@ -1,7 +1,10 @@
 # Minimal Word Count Example with Pipeline Representation
+*See this [blog post][4] that explains this code in detail.*
+
 Apache Beam project based on the [minimal word count example][1], modified to show how to get the pipeline representation.
 
-More info about the word count examples can be found in the [documentation][2].
+More general info about the word count examples in Apache Beam can be found in the [documentation][2].
+
 
 ## Running the code
 
@@ -17,7 +20,7 @@ mvn compile exec:java \
         -Pdirect-runner
 ```
 
-
 [1]: https://github.com/apache/beam/blob/master/examples/java/src/main/java/org/apache/beam/examples/MinimalWordCount.java
 [2]: https://beam.apache.org/get-started/wordcount-example/
 [3]: https://issues.apache.org/jira/browse/BEAM-2530
+[4]: https://mehmandarov.com/apache-beam-pipeline-graph/
